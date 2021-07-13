@@ -1,0 +1,23 @@
+{
+    "files.associations": {
+        "array": "cpp",
+        "ostream": "cpp",
+        "xstring": "cpp",
+        "stack": "cpp",
+        "vector": "cpp",
+        "map": "cpp",
+        "xtree": "cpp",
+        "xmemory": "cpp",
+        "deque": "cpp",
+        "initializer_list": "cpp",
+        "list": "cpp",
+        "xhash": "cpp",
+        "xutility": "cpp",
+        "algorithm": "cpp",
+        "thread": "cpp",
+        "type_traits": "cpp",
+        "xstddef": "cpp",
+        "*.ipp": "cpp"
+    },
+    "python.pythonPath": "C:\\Users\\ksh93\\AppData\\Local\\Programs\\Python\\Python38\\python.exe"
+}
