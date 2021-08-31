@@ -1,45 +1,60 @@
 #include <algorithm>
 #include <array>
 #include <iostream>
+#include <numeric>
+#include <set>
 #include <string>
 #include <vector>
 
 using namespace std;
 
-int solution(int N, int number);
-int dcalc(const int N, const int number, const int Nn, const int C);
+int nrepeat(const int n, const int rep) {
+    int a = 0;
+    for (int i = 0; i < rep; i++) {
+        a = a * 10 + n;
+    }
+    return a;
+}
 
-int main() {
-    cout << solution(2, 11) << endl;
-    return 0;
+const int MAX_DEPTH = 8;
+int recur(const int n, const int target, const int depth,
+          array<set<int>, MAX_DEPTH + 1> &mem) {
+    if (depth > MAX_DEPTH) {
+        return -1;
+    }
+    if (mem[depth].empty()) {
+        mem[depth] = {nrepeat(n, depth)};
+        for (size_t i = depth - 1; i >= 1; i--) {
+            set<int>::const_iterator lbe = mem[i].cbegin(), led = mem[i].cend();
+            set<int>::const_iterator rbe = mem[depth - i].cbegin(),
+                                     red = mem[depth - i].cend();
+            for (auto lv = lbe; lv != led; lv++) {
+                for (auto rv = rbe; rv != red; rv++) {
+                    mem[depth].insert(*lv + *rv);
+                    mem[depth].insert(*lv - *rv);
+                    mem[depth].insert(*lv * *rv);
+                    if (*rv != 0) {
+                        int adb = *lv / *rv;
+                        mem[depth].insert(adb);
+                    }
+                }
+            }
+        }
+        auto rf = find(mem[depth].cbegin(), mem[depth].cend(), target);
+        if (rf != mem[depth].cend()) {
+            return depth;
+        }
+        return recur(n, target, depth + 1, mem);
+    }
 }
 
 int solution(int N, int number) {
-    int answer = dcalc(N, number, N, 1);
-    return answer > 8 ? -1 : answer;
+    array<set<int>, MAX_DEPTH + 1> mem;
+    mem[0] = {};
+    return recur(N, number, 1, mem);
 }
 
-array<int, 32001> mem;
-
-int dcalc(const int N, const int number, const int Nn, const int C) {
-    if (C > 8 || number < 0) {
-        return 8;
-    }
-    if (number == 0) {
-        return C;
-    }
-    if ( number < 32001 && mem[number] != 0) {
-        return mem[number];
-    }
-    int answer = min({
-        dcalc(N, number, Nn * 10 + N, C + 1),
-        dcalc(N, number - Nn, N, C + 1),
-        dcalc(N, number + Nn, N, C + 1),
-        dcalc(N, number / Nn, N, C + 1),
-        dcalc(N, number * Nn, N, C + 1),
-    });
-    if ( number < 32001) {
-        mem[number] = answer;
-    }
-    return answer;
+int main() {
+    cout << solution(8, 53) << endl;
+    return 0;
 }
