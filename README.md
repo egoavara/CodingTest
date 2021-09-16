@@ -27,6 +27,10 @@
 - [C30L60060](https://programmers.co.kr/learn/courses/30/lessons/60060)
   - Trie 자료구조
   - 하위 항목 개수세기
+- [C30L42891](https://programmers.co.kr/learn/courses/30/lessons/42891)
+  - 무지의 먹방
+  - 해당하는 알고리즘이라기보다는 방법론
+  - 딱 4성급 난이도
 ### 기억할 만한 것
 - [C30L84512](https://programmers.co.kr/learn/courses/30/lessons/84512)
   - 단어의 우선순위
