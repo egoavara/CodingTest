@@ -86,7 +86,6 @@ def solution(board, skill):
         for y in range(r0, r1+1):
             for x in range(c0, c1+1):
                 board[y][x] += deg if tp == 2 else -deg
-    print(np.array(board))
     return sum(1 for line in board for building in line if building > 0)
 
 
