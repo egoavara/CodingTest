@@ -1,5 +1,5 @@
 # %%
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 import more_itertools as mit
@@ -87,14 +87,15 @@ class Params:
     BASE_C: float = 80  # 기본적 매칭 레이팅 오차범위
     DT_C: float = 13  # 시간 오차에 따른 매칭범위 확장
     BASE_UPSCORE: float = 60
-    BASE_UPSCORE_ADVANTAGE : float= 80
+    BASE_UPSCORE_ADVANTAGE: float = 80
     BASE_DOWNSCORE: float = 50
     BASE_DOWNSCORE_ADVANTAGE: float = 50
     HARDER_RESULT_ADVANTAGE: float = 110
     MAX_WAITTIME: float = 20
-    MODIFIER_FACTORS: float = [4, 6]  # TIME, RATING
+    MODIFIER_FACTORS: List[float] = field(default_factory=lambda: [4, 6])
     ABUSER_PERNISHMENT: float = 75
     ABUSER_CNT_THERES: float = 5
+
 
 game = Game.generate(100)
 while game.next():
@@ -104,19 +105,18 @@ print(game.tstamp)
 
 
 # # %%
-# waiting_model = keras.Sequential([
-#     layers.InputLayer((32, 2)),
-#     layers.Flatten(),
-#     layers.Dense(128, activation='relu'),
-#     layers.Dense(128, activation='relu'),
-#     layers.Dense(128, activation='relu'),
-#     layers.Dense(128, activation='relu'),
-#     layers.Dense(32 ** 2, activation='softmax'),
-#     layers.Reshape((32, 32)),
-# ])
-# waiting_model.summary()
-# # %%
-# opti = keras.optimizers.RMSprop()
+waiting_model = keras.Sequential([
+    layers.InputLayer((32, 2)),
+    layers.Conv1D(32, 2, padding='same'),
+    layers.Flatten(),
+    layers.Dense(128, activation='relu'),
+    layers.Dense(128, activation='relu'),
+    layers.Dense(32 ** 2, activation='softmax'),
+    layers.Reshape((32, 32)),
+])
+waiting_model.summary()
+# %%
+opti = keras.optimizers.RMSprop()
 
 # # %%
 # batchsize = 100000

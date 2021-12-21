@@ -1,16 +1,16 @@
 # %% API 정의 블록
 # 2022 KAKAO blind recuitment 2nd
 # 접속을 위한 API 리스트 정의
-# 
+#
 # # 내장 라이브러리
 # - json        : JSON 데이터 처리
 # - dataclass   : 클래스 정의를 보기 좋게 하기 위함
-# 
+#
 # # 외부 라이브러리 이용
 # - requests    : https://docs.python-requests.org/en/latest/  : HTTP 라이브러리, RESTful API 호출을 위해 호출
 # - numpy       : https://numpy.org/                           : 선형대수 라이브러리, 배열을 다루기 위해 이용
-# 
-# 
+#
+#
 # 문제 선택은
 # `pno : 1|2` 변수를 이용해 진행합니다.
 import requests as req
@@ -124,12 +124,13 @@ class API:
         ).json()
         return API.Instance(res['auth_key'], res['problem'], res['time'], 'ready')
 
+
 @dataclass
 class UserStat:
-    average : float
-    std : float
-    min : float
-    max : float
+    average: float
+    std: float
+    min: float
+    max: float
 # %% 1번 문제
 #
 # 그냥 계속 레이팅 변경 없이 계속 진행한 결과
@@ -227,7 +228,7 @@ class UserStat:
 # HARDER_RESULT = 90, 120
 # # 최대대기시간 25분 확대
 # {'status': 'finished', 'efficiency_score': '83.7311', 'accuracy_score1': '60.6667', 'accuracy_score2': '60.0198', 'score': '211.8087'}
-# 
+#
 # 14차 시도 롤백
 
 # %% 2번 문제
@@ -240,9 +241,6 @@ class UserStat:
 # 3차 시도
 # # 기록 기반 어뷰징 확인
 # {'status': 'finished', 'efficiency_score': '99.1159', 'accuracy_score1': '52.8827', 'accuracy_score2': '56.9199', 'score': '211.0558'}
-
-
-
 
 
 # %% 실행블록
@@ -279,9 +277,10 @@ stat_loop = 0
 stat_result_recv = 0
 stat_match_send = 0
 stat_mreq_recv = 0
-# 
+#
 abuser_db_cnt = {}
 abuser_db_val = {}
+
 
 def check_intersect(a, b):
     amin, amax = a
@@ -315,7 +314,9 @@ def intersect_space(a, b):
     return 0
 
 # 게임 결과 분석
-def game_result_calc(gr, users, user_stat:UserStat):
+
+
+def game_result_calc(gr, users, user_stat: UserStat):
     changings = []
     for gresult in gr:
         taken = gresult['taken']
@@ -341,7 +342,7 @@ def game_result_calc(gr, users, user_stat:UserStat):
         # 어뷰져 탐색
         if pno == 2:
             # 어뷰저의 게임 시간은 10분 내이다
-            if taken <= ABUSER_GAMETIME_MAX :
+            if taken <= ABUSER_GAMETIME_MAX:
                 # 진 쪽이 어뷰저인지 확인해야 함
                 # 레이팅이 비교적 정확하다고 가정하고 확인
                 if users[who_lose] > users[who_win]:
@@ -353,9 +354,10 @@ def game_result_calc(gr, users, user_stat:UserStat):
                         abuser_db_cnt[who_lose] += 1
                         abuser_db_val[who_lose] += modifier_rating
                     if who_lose in abuser_db_cnt and abuser_db_cnt[who_lose] >= ABUSER_CNT_THERES:
-                        arate = abuser_db_val[who_lose] / abuser_db_cnt[who_lose]
+                        arate = abuser_db_val[who_lose] / \
+                            abuser_db_cnt[who_lose]
                         nloseg += ABUSER_PERNISHMENT * arate ** 2
-        # 
+        #
         nwing = max(min(nwing, GRADE_MAX), GRADE_MIN)
         nloseg = max(min(nloseg, GRADE_MAX), GRADE_MIN)
         # 레이팅 변동사항 전달
@@ -368,6 +370,7 @@ def game_result_calc(gr, users, user_stat:UserStat):
             "grade": int(nloseg),
         })
     return changings
+
 
 def matching_calc(waits, users, user_stat):
     matching_send = []
@@ -403,6 +406,7 @@ def matching_calc(waits, users, user_stat):
             matching_send.append([champion, chalenger])
     return matching_send
 
+
 # 주 매칭 루프
 while instance.status == 'ready':
     # 유저 정보를 dict 형태로 변형
@@ -420,7 +424,8 @@ while instance.status == 'ready':
         print(f"> {stat_loop}번째 작업")
         print(
             f">> 매칭<요청/승인/결과> {stat_mreq_recv}/{stat_match_send}/{stat_result_recv} 회")
-        print(f">> 레이팅 : 평균 = {user_stat.average:.4f}, 표준편차 = {user_stat.std:.4f}")
+        print(
+            f">> 레이팅 : 평균 = {user_stat.average:.4f}, 표준편차 = {user_stat.std:.4f}")
         print()
     # 게임 결과 분석
     gr = instance.game_result()
