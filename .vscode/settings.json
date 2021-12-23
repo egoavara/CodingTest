@@ -5,6 +5,7 @@
         "xtree": "cpp",
         "vector": "cpp",
         "utility": "cpp",
-        "locale": "cpp"
+        "locale": "cpp",
+        "cstdio": "cpp"
     }
 }
